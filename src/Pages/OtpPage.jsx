@@ -40,6 +40,7 @@ const OtpPage = () => {
   return (
     <section className="bg-[#111A2B] h-screen flex justify-center items-center">
       <div>
+        <div id="recaptcha-container"></div>
         {user ? (
           <h1 className="text-center font-semibold text-white  text-2xl">
             Yay..!!!
