@@ -7,6 +7,9 @@ import OtpInput, { ResendOTP } from 'otp-input-react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
+import { auth } from './firebase.config';
+import { RecaptchaVerifier } from 'firebase/auth';
+
 const OtpPage = () => {
   const [OTP, setOTP] = useState();
   const [phone, setPhone] = useState();
@@ -14,11 +17,31 @@ const OtpPage = () => {
   const [showOtp, setShowOtp] = useState(true);
   const [user, setUser] = useState(null);
 
+  const verifyCaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        'recaptcha-container',
+        {
+          size: 'invisible',
+          callback: (response) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            // ...
+          },
+          'expired-callback': () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            // ...
+          },
+        },
+        auth
+      );
+    }
+  };
+
   return (
     <section className="bg-[#111A2B] h-screen flex justify-center items-center">
       <div>
-        {!user ? (
-          <h1 className="text-center text-white  text-xl">
+        {user ? (
+          <h1 className="text-center font-semibold text-white  text-2xl">
             Yay..!!!
             <br /> Login Successfully
           </h1>
